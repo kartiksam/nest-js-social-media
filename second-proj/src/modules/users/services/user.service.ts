@@ -4,7 +4,7 @@ import { ResponseUserDto } from "../dto/Response-user-dto";
 import { InjectModel } from "@nestjs/mongoose";
 import { UserDocument, User } from "../../../schema/user.Schema";
 import { Model } from "mongoose";
-import { toResponseDto } from "../../../Helper/user-mapper";
+import { toResponseDto } from "../../../utils/user-mapper";
 @Injectable()
 export class UserService {
 
