@@ -8,6 +8,7 @@ export class ResponseUserDto {
     @ApiProperty()
     email: string;
 
+
     @ApiProperty()
     createdBy?: Types.ObjectId;
 }

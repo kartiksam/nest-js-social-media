@@ -1,15 +1,21 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsNumber, IsString } from "class-validator";
+import { Type } from "class-transformer";
+import { IsNumber, IsString, ValidateNested } from "class-validator";
 import { Address } from "src/schema/address-Schema";
+import { AddressDto } from "./address-dto";
 
 export class ProfileDto {
+    @ApiProperty({ type: AddressDto })
+    @ValidateNested()
+    @Type(() => AddressDto)
+    address: AddressDto;
 
-    @ApiProperty()
-    address: Address;
 
     @ApiProperty()
     @IsNumber()
     contactNumber: number;
+
+
 
     @ApiProperty()
     @IsString()

@@ -5,5 +5,6 @@ export function toResponseDto(user: UserDocument): ResponseUserDto {
         name: user.name,
         email: user.email,
 
+
     };
 }

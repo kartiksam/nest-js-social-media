@@ -13,6 +13,8 @@ export class UserDetails {
     @Prop()
     contactNumber: number;
 
+
+
     @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true })
     createdBy: string;
 

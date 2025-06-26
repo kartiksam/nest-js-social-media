@@ -13,6 +13,9 @@ export class ResponseProfileDto {
     contactNUmber: number;
 
     @ApiProperty()
+    image: string;
+
+    @ApiProperty()
     createdAt: Date;
 
     @ApiProperty()

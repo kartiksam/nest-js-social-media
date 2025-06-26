@@ -40,4 +40,12 @@ export class UserDetailsService {
         return `Profile with provided id ${id} is deleted succesfully`;
     }
 
+
+    async getProfileByUserId(id: string): Promise<ResponseProfileDto> {
+        const profile = await this.profileModel.findOne({ createdBy: id }).exec();
+        if (!profile) {
+            throw new NotFoundException("not exists with the given id");
+        }
+        return toResponseProfileDto(profile);
+    }
 }
