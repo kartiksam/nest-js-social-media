@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from "@nestjs/common";
+import { Body, Controller, Get, Param, Post } from "@nestjs/common";
 import { CommentsService } from "../services/comments.services";
 import { ApiTags } from "@nestjs/swagger";
 import { createCommentsDto } from "../dtos/create-comment";
@@ -13,12 +13,17 @@ export class CommentsController {
 
 
     @Get("/get")
-    getAllComments(): string {
-        return "All comments";
+    getAllComments() {
+        return this.commentService.getAllComments();
     }
 
     @Post("/create")
     createComment(@Body() dto: createCommentsDto): Promise<ResponseCommentDto> {
         return this.commentService.createComment(dto);
+    }
+
+    @Get("/:id")
+    async getCommentById(@Param('id') id: string): Promise<ResponseCommentDto> {
+        return await this.commentService.getCommentById(id);
     }
 }
