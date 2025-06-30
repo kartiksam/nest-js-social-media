@@ -1,7 +1,16 @@
-import { Controller, Delete, Get, Param, Post, Body } from "@nestjs/common";
+import { Controller, Delete, Get, Param, Post, Body, UseInterceptors, UploadedFile, Patch, Res } from "@nestjs/common";
 import { UserDetailsService } from "../services/user-details.services";
 import { ProfileDto } from "../dto/create-profile-dto";
 import { ResponseProfileDto } from "../dto/Response-dto";
+import { FileInterceptor } from "@nestjs/platform-express";
+import { diskStorage } from "multer";
+import { v4 as uuidv4 } from 'uuid';
+import { Observable, of } from "rxjs";
+import path, { join } from "path";
+import { Response } from 'express';
+
+import { ApiBody, ApiConsumes, ApiOperation } from "@nestjs/swagger";
+
 
 @Controller('Profile')
 export class UserDetailsController {
@@ -18,10 +27,10 @@ export class UserDetailsController {
 
     @Get("/get")
     getAllData() {
-
         return this.userService.getAllData();
-
     }
+
+
 
     @Get("/:id")
     getProfileByProfileId(@Param('id') id: string): Promise<ResponseProfileDto> {
@@ -37,4 +46,60 @@ export class UserDetailsController {
     getProfileByUserId(@Param('id') id: string): Promise<ResponseProfileDto> {
         return this.userService.getProfileByUserId(id);
     }
+
+    @Get("profile-image/:imagename")
+    findProfileImage(@Param('imagename') imagename: string, @Res() res: Response) {
+        const imagePath = join(process.cwd(), 'avatars', imagename);
+        return res.sendFile(imagePath);
+    }
+
+
+    @Patch(':id/upload-image')
+    @UseInterceptors(FileInterceptor('file', {
+
+        storage: diskStorage({
+            destination: './avatars',
+            filename: (req, file, cb) => {
+                const filename: string = path.parse(file.originalname).name.replace(/\s/g, '') + uuidv4();
+                const extension: string = path.parse(file.originalname).ext;
+                cb(null, `${filename}${extension}`);
+            }
+        })
+    }
+    ))
+    @ApiConsumes('multipart/form-data')
+    @ApiBody({
+        description: 'Upload profile image',
+        schema: {
+            type: 'object',
+            properties: {
+                file: {
+                    type: 'string',
+                    format: 'binary',
+                },
+            },
+        },
+    })
+    @ApiOperation({ summary: 'Upload profile image for a user' })
+    async uploadFile(@Param('id') id: string,
+        @UploadedFile() file: Express.Multer.File,): Promise<{ message: string }> {
+        return await this.userService.uploadImage(id, file);
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 } 

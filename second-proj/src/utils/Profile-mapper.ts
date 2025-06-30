@@ -10,7 +10,7 @@ export function toResponseProfileDto(profile: any): ResponseProfileDto {
             state: profile.address?.state,
             pinCode: profile.address?.pinCode
         },
-        image: profile.image,
+
         contactNUmber: profile.contactNUmber,
         createdAt: profile.createdAt,
         updatedAt: profile.updatedAt,

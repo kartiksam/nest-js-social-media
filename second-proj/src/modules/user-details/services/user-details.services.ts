@@ -6,6 +6,7 @@ import { ProfileDto } from "../dto/create-profile-dto";
 import { ResponseProfileDto } from "../dto/Response-dto";
 import { toResponseProfileDto } from "src/utils/Profile-mapper";
 import { profile } from "console";
+import { Observable } from "rxjs";
 @Injectable()
 export class UserDetailsService {
 
@@ -48,4 +49,19 @@ export class UserDetailsService {
         }
         return toResponseProfileDto(profile);
     }
+
+
+
+    async uploadImage(id: string, file: Express.Multer.File): Promise<{ message: string }> {
+        const imageUrl = `/uploads/${file.filename}`;
+        await this.profileModel.findByIdAndUpdate(id, { image: imageUrl });
+        return { message: "Profile uploaded succesfully" };
+    }
+
+
+
+
+
+
+
 }
