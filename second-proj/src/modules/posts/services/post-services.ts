@@ -13,10 +13,10 @@ export class PostService {
 
     constructor(@InjectModel(Posts.name) private postModel: Model<PostDocument>) { }
 
-    async createPost(dto: CreatePostDto): Promise<ResponsePostDto> {
+    async createPost(dto: CreatePostDto, file?: Express.Multer.File): Promise<ResponsePostDto> {
         const { title, description, likesCount, createdBy } = dto;
         const post = new this.postModel({
-            title, description, likesCount, createdBy
+            title, description, image: file?.filename, likesCount, createdBy
         });
         await post.save();
         return toResponsePostDto(post);

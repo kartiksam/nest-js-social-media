@@ -7,6 +7,8 @@ export class CreatePostDto {
     @ApiProperty()
     description: string;
 
+    @ApiProperty()
+    image: string;
 
     @ApiProperty()
     likesCount: number;

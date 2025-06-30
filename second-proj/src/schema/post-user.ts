@@ -13,6 +13,9 @@ export class Posts {
     description: string;
 
     @Prop()
+    image: string;
+
+    @Prop()
     likesCount: number;
 
     @Prop({

@@ -15,7 +15,5 @@ export class UserDto {
     @IsString()
     password: string;
 
-    g;
-
 
 }

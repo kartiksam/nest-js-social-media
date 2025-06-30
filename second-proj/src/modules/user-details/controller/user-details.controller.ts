@@ -24,6 +24,7 @@ export class UserDetailsController {
         return this.userService.createProfile(dto);
     }
 
+    @ApiOperation({ summary: 'Get all profiles' })
 
     @Get("/get")
     getAllData() {
@@ -31,6 +32,7 @@ export class UserDetailsController {
     }
 
 
+    @ApiOperation({ summary: 'Get profile by userId' })
 
     @Get("/:id")
     getProfileByProfileId(@Param('id') id: string): Promise<ResponseProfileDto> {
@@ -42,11 +44,13 @@ export class UserDetailsController {
         return await this.userService.deleteByID(id);
     }
 
+    @ApiOperation({ summary: 'Get profile by userId' })
     @Get("/:id/profile")
     getProfileByUserId(@Param('id') id: string): Promise<ResponseProfileDto> {
         return this.userService.getProfileByUserId(id);
     }
 
+    @ApiOperation({ summary: 'Get profile image for a user' })
     @Get("profile-image/:imagename")
     findProfileImage(@Param('imagename') imagename: string, @Res() res: Response) {
         const imagePath = join(process.cwd(), 'avatars', imagename);
@@ -82,24 +86,15 @@ export class UserDetailsController {
     })
     @ApiOperation({ summary: 'Upload profile image for a user' })
     async uploadFile(@Param('id') id: string,
-        @UploadedFile() file: Express.Multer.File,): Promise<{ message: string }> {
+        @UploadedFile() file: Express.Multer.File): Promise<{ message: string }> {
+        // uploaded file comes here 
         return await this.userService.uploadImage(id, file);
 
     }
 
+    // authorziation
+}
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-} 
+// beare token growth usko bhi le ana
