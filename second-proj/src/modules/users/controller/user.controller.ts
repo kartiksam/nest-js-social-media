@@ -1,11 +1,13 @@
-import { Body, Controller, Post, Get, Param, Delete } from "@nestjs/common";
+import { Body, Controller, Post, Get, Param, Delete, UseGuards } from "@nestjs/common";
 import { UserDto } from "../dto/create-user-dto";
 import { ResponseUserDto } from "../dto/Response-user-dto";
 import { UserService } from "../services/user.service";
 import { ApiResponse } from "@nestjs/swagger";
 import { ApiTags } from '@nestjs/swagger';
+import { AuthGuard } from "@nestjs/passport";
 
 @ApiTags('users')
+//@UseGuards(AuthGuard)
 @Controller('users')
 export class UserController {
 

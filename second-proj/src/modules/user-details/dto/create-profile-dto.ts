@@ -12,7 +12,6 @@ export class ProfileDto {
 
 
     @ApiProperty()
-
     @IsNumber()
     contactNumber: number;
 

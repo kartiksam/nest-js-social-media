@@ -19,7 +19,6 @@ export class PostController {
 
     @Post("/create")
     @UseInterceptors(FileInterceptor('file', {
-
         storage: diskStorage({
             destination: './avatars',
             filename: (req, file, cb) => {
@@ -33,7 +32,6 @@ export class PostController {
     @ApiOperation({ summary: 'Create a post with optional image and tags' })
     @ApiResponse({ status: 201, type: ResponsePostDto })
     @ApiConsumes('multipart/form-data')
-
     @ApiBody({
         schema: {
             type: 'object',
@@ -42,7 +40,6 @@ export class PostController {
                 description: { type: 'string' },
                 likesCount: { type: 'number' },
                 createdBy: { type: 'string' },
-
                 file: {
                     type: 'string',
                     format: 'binary'
@@ -50,9 +47,6 @@ export class PostController {
             }
         }
     })
-
-
-
     createPost(@Body() dto: CreatePostDto, @UploadedFile() file: Express.Multer.File): Promise<ResponsePostDto> {
         return this.postService.createPost(dto, file);
 
@@ -75,49 +69,5 @@ export class PostController {
     getDeleteById(@Param('id') id: string): Promise<string> {
         return this.postService.deleteById(id);
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
 
