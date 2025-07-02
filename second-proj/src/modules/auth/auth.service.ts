@@ -25,7 +25,11 @@ export class AuthService {
 
 
     generateToken(user: any): string {
-        const payload = { sub: user.id, email: user.email, role: user.role };
+        const plainUser = user.toObject?.() || user._doc || user;
+        console.log(plainUser);
+        const payload = { sub: plainUser._id, email: plainUser.email, role: plainUser.role };
+        console.log('Token payload:', payload); // Optional
+
         return jwt.sign(payload, this.SECRET_KEY);
     }
 

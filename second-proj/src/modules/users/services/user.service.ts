@@ -5,6 +5,7 @@ import { InjectModel } from "@nestjs/mongoose";
 import { UserDocument, User } from "../../../schema/user.Schema";
 import { Model } from "mongoose";
 import { toResponseDto } from "../../../utils/user-mapper";
+import { Role } from "src/enums/role";
 
 @Injectable()
 export class UserService {
@@ -12,8 +13,8 @@ export class UserService {
 
     constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) { }
 
-    async create(dto: UserDto): Promise<ResponseUserDto> {
-        const { name, email, password } = dto;
+    async create(dto: any): Promise<ResponseUserDto> {
+        const { name, email, password, role } = dto;
         const existingUser = await this.userModel.findOne({ email });
         if (existingUser) {
             throw new ConflictException('User already exists');
@@ -21,7 +22,7 @@ export class UserService {
 
         const user = new this.userModel({
             name,
-            email, password
+            email, password, role
 
         });
         await user.save();
@@ -51,9 +52,6 @@ export class UserService {
     async findByEmail(email: string) {
         return await this.userModel.findOne({ email: email });
     }
-
-
-
 }
 
 

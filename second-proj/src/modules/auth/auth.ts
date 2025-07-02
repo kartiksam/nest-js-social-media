@@ -12,7 +12,7 @@ import { AuthService } from './auth.service';
 export class KartikAuth implements CanActivate {
     constructor(private authSer: AuthService) { }
 
-    canActivate(context: ExecutionContext): boolean {
+    async canActivate(context: ExecutionContext): Promise<boolean> {
         const request = context.switchToHttp().getRequest<Request>();
         const authHeader = request.headers['authorization'];
 
@@ -22,7 +22,8 @@ export class KartikAuth implements CanActivate {
 
         const token = authHeader.replace('Bearer ', '');
         try {
-            const payload = this.authSer.verifyToken(token);
+            const payload = await this.authSer.verifyToken(token);
+            console.log('Token payload:', payload);
             request['user'] = payload; // Attach payload to request
             return true;
         } catch {

@@ -5,6 +5,9 @@ import { UserService } from "../services/user.service";
 import { ApiBearerAuth, ApiResponse } from "@nestjs/swagger";
 import { ApiTags } from '@nestjs/swagger';
 import { KartikAuth } from "src/modules/auth/auth";
+import { RolesGuard } from "src/modules/auth/role.guard.service";
+import { Roles } from "src/decorators/roles.decorator";
+import { Role } from "src/enums/role";
 
 @ApiTags('users')
 
@@ -13,15 +16,16 @@ export class UserController {
 
     constructor(private readonly userService: UserService) { }
 
-    @ApiResponse({
-        status: 201, description: "User Created", type: ResponseUserDto
-    })
-    @Post("/create")
-    createUser(@Body() createUserDto: UserDto): Promise<ResponseUserDto> {
-        return this.userService.create(createUserDto);
-    }
+    // @ApiResponse({
+    //     status: 201, description: "User Created", type: ResponseUserDto
+    // })
+    // @Post("/create")
+    // createUser(@Body() createUserDto: UserDto): Promise<ResponseUserDto> {
+    //     return this.userService.create(createUserDto);
+    // }
 
-    @UseGuards(KartikAuth)
+    @UseGuards(KartikAuth, RolesGuard)
+    @Roles(Role.USER)
     @ApiBearerAuth()
     @Get("/get")
     getData() {
@@ -38,7 +42,4 @@ export class UserController {
         await this.userService.deleteById(id);
         return "Deleted Succesfully";
     }
-
-
-
 }
