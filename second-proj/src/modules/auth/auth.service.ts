@@ -1,13 +1,16 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
+import * as jwt from "jsonwebtoken";
 import { UserService } from '../users/services/user.service';
 import { LoginDto } from './dto/loginDto';
 import { RegisterDto } from './dto/registerDto';
+import { KartikAuth } from './auth';
+
 
 @Injectable()
 export class AuthService {
-    constructor(private jwtService: JwtService, private userService: UserService) { }
+    constructor(private userService: UserService) { }
 
+    private SECRET_KEY = "jhkjhfdkjhjhgjgfjgjgfjgdjhbfdghfhgjkhdfghdkjfghsdghdjkfghjkdfhjkghkjgf";
 
     async validateUser(dto: LoginDto): Promise<any> {
         const { email, password } = dto;
@@ -23,16 +26,17 @@ export class AuthService {
 
     generateToken(user: any): string {
         const payload = { sub: user.id, email: user.email, role: user.role };
-        return this.jwtService.sign(payload);
+        return jwt.sign(payload, this.SECRET_KEY);
     }
 
-    // verifyToken(token: string): any {
-    //     try {
-    //         return this.jwtService.verify(token);
-    //     } catch (err) {
-    //         throw new UnauthorizedException('Invalid or expired token');
-    //     }
-    // }
+    async verifyToken(token: string) {
+        try {
+            return jwt.verify(token, this.SECRET_KEY)
+        }
+        catch (err) {
+            throw new UnauthorizedException('Invalid Token')
+        }
+    }
 
     async register(dto: RegisterDto) {
         return this.userService.create(dto);

@@ -7,10 +7,10 @@ import { UserDetailsModule } from './modules/user-details/user-details.module';
 import { PostsModule } from './modules/posts/posts.module';
 import { CommentsModule } from './modules/comments/comments.module';
 import { AuthModule } from './modules/auth/auth.module';
-import { GuardModule } from './guard/guard.module';
+
 
 @Module({
-  imports: [UserModule, DatabaseModule, UserDetailsModule, PostsModule, CommentsModule, AuthModule, GuardModule],
+  imports: [UserModule, DatabaseModule, UserDetailsModule, PostsModule, CommentsModule, AuthModule],
   controllers: [AppController],
   providers: [AppService],
 })

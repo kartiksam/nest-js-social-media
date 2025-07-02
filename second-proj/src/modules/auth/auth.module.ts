@@ -1,19 +1,21 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
-import { JwtStrategy } from './jwt.strategy'
+
 
 import { JwtModule, JwtService } from '@nestjs/jwt';
 import { UserModule } from '../users/user-modules';
+import { KartikAuth } from './auth';
+
+
 @Module({
   imports: [
-    JwtModule.register({
-      secret: 'abcdefghijklmnopqrstuvwxyzabcdefghijkl',
-      signOptions: { expiresIn: '1d' }
 
-    }), UserModule
+    forwardRef(() => UserModule)
+
   ],
-  providers: [AuthService],
-  controllers: [AuthController]
+  providers: [AuthService, KartikAuth],
+  controllers: [AuthController],
+  exports: [KartikAuth, AuthService]
 })
 export class AuthModule { }

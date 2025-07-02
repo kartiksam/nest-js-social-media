@@ -4,12 +4,13 @@ import {
     Injectable,
     UnauthorizedException,
 } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
+
 import { Request } from 'express';
+import { AuthService } from './auth.service';
 
 @Injectable()
-export class JwtAuthGuard implements CanActivate {
-    constructor(private jwtService: JwtService) { }
+export class KartikAuth implements CanActivate {
+    constructor(private authSer: AuthService) { }
 
     canActivate(context: ExecutionContext): boolean {
         const request = context.switchToHttp().getRequest<Request>();
@@ -21,7 +22,7 @@ export class JwtAuthGuard implements CanActivate {
 
         const token = authHeader.replace('Bearer ', '');
         try {
-            const payload = this.jwtService.verify(token);
+            const payload = this.authSer.verifyToken(token);
             request['user'] = payload; // Attach payload to request
             return true;
         } catch {

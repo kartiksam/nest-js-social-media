@@ -2,12 +2,12 @@ import { Body, Controller, Post, Get, Param, Delete, UseGuards } from "@nestjs/c
 import { UserDto } from "../dto/create-user-dto";
 import { ResponseUserDto } from "../dto/Response-user-dto";
 import { UserService } from "../services/user.service";
-import { ApiResponse } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiResponse } from "@nestjs/swagger";
 import { ApiTags } from '@nestjs/swagger';
-import { AuthGuard } from "@nestjs/passport";
+import { KartikAuth } from "src/modules/auth/auth";
 
 @ApiTags('users')
-//@UseGuards(AuthGuard)
+
 @Controller('users')
 export class UserController {
 
@@ -21,6 +21,8 @@ export class UserController {
         return this.userService.create(createUserDto);
     }
 
+    @UseGuards(KartikAuth)
+    @ApiBearerAuth()
     @Get("/get")
     getData() {
         return this.userService.getData();

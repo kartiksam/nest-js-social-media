@@ -9,7 +9,7 @@ async function bootstrap() {
     .setTitle('Posts-RealTime')
     .setDescription('The post Api Description')
     .setVersion('1.0')
-
+    .addBearerAuth()
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
