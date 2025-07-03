@@ -3,7 +3,8 @@ import * as jwt from "jsonwebtoken";
 import { UserService } from '../users/services/user.service';
 import { LoginDto } from './dto/loginDto';
 import { RegisterDto } from './dto/registerDto';
-import { KartikAuth } from './auth';
+import * as bcrypt from 'bcrypt';
+
 
 
 @Injectable()
@@ -18,6 +19,10 @@ export class AuthService {
         if (!user) {
             throw new UnauthorizedException('User not found');
         }
+        const isPasswordValid = await bcrypt.compare(password, user.password);
+        if (!isPasswordValid) {
+            throw new UnauthorizedException('Invalid credentials');
+        }
         const { password: _, ...userWithoutPassword } = user;
         return userWithoutPassword;
     }
@@ -27,7 +32,7 @@ export class AuthService {
     generateToken(user: any): string {
         const plainUser = user.toObject?.() || user._doc || user;
         console.log(plainUser);
-        const payload = { sub: plainUser._id, email: plainUser.email, role: plainUser.role };
+        const payload = { id: plainUser._id, email: plainUser.email, role: plainUser.role };
         console.log('Token payload:', payload); // Optional
 
         return jwt.sign(payload, this.SECRET_KEY);

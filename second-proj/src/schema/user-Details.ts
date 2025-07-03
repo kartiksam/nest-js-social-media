@@ -17,8 +17,8 @@ export class UserDetails {
     image?: string;
 
 
-    @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true })
-    createdBy: string;
+    @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
+    createdBy?: string;
 
 
 }

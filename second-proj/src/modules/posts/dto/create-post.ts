@@ -1,4 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
+import { IsOptional } from "class-validator";
 
 export class CreatePostDto {
     @ApiProperty()
@@ -14,6 +15,7 @@ export class CreatePostDto {
     likesCount: number;
 
     @ApiProperty()
+    @IsOptional()
     createdBy: string;
 
 }

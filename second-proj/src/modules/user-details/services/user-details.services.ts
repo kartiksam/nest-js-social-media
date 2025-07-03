@@ -1,23 +1,25 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { UserDetails, UserDetailsDocument } from "src/schema/user-Details";
-import { Model } from "mongoose";
+import mongoose, { Model } from "mongoose";
 import { ProfileDto } from "../dto/create-profile-dto";
 import { ResponseProfileDto } from "../dto/Response-dto";
 import { toResponseProfileDto } from "src/utils/Profile-mapper";
-import { profile } from "console";
-import { Observable } from "rxjs";
+
 @Injectable()
 export class UserDetailsService {
 
     constructor(@InjectModel(UserDetails.name) private profileModel: Model<UserDetailsDocument>) { }
 
-    async createProfile(dto: ProfileDto): Promise<ResponseProfileDto> {
-        const { address, contactNumber, createdBy } = dto;
+    async createProfile(dto: ProfileDto, req: Request): Promise<ResponseProfileDto> {
+        const userId = (req as any).user?.id;
+        console.log(userId);
+        const { address, contactNumber } = dto;
         const profile = new this.profileModel({
-            address, contactNumber, createdBy
+            address, contactNumber, createdBy: userId
 
         });
+
         await profile.save();
         return toResponseProfileDto(profile);
     }
@@ -42,14 +44,21 @@ export class UserDetailsService {
     }
 
 
+    // async getProfileByUserId(id: string): Promise<ResponseProfileDto> {
+    //     const profile = await this.profileModel.findOne({ createdBy: id }).exec();
+    //     if (!profile) {
+    //         throw new NotFoundException("not exists with the given id");
+    //     }
+    //     return toResponseProfileDto(profile);
+    // }
+
     async getProfileByUserId(id: string): Promise<ResponseProfileDto> {
-        const profile = await this.profileModel.findOne({ createdBy: id }).exec();
+        const profile = await this.profileModel.findOne({ createdBy: new mongoose.Types.ObjectId(id) }).exec();
         if (!profile) {
             throw new NotFoundException("not exists with the given id");
         }
         return toResponseProfileDto(profile);
     }
-
 
 
     async uploadImage(id: string, file: Express.Multer.File): Promise<{ message: string }> {

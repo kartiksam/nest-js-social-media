@@ -25,8 +25,8 @@ export class UserController {
     // }
 
     @UseGuards(KartikAuth, RolesGuard)
-    @Roles(Role.USER)
     @ApiBearerAuth()
+    @Roles(Role.USER)
     @Get("/get")
     getData() {
         return this.userService.getData();

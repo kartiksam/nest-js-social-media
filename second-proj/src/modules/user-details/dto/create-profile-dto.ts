@@ -20,6 +20,7 @@ export class ProfileDto {
     image: string;
 
     @ApiProperty()
+    @IsOptional()
     @IsString()
     createdBy: string;
 

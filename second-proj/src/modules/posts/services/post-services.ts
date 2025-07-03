@@ -3,7 +3,6 @@ import { InjectModel } from "@nestjs/mongoose";
 import { PostDocument, Posts } from "src/schema/post-user";
 import { Model } from "mongoose";
 import { CreatePostDto } from "../dto/create-post";
-import { ResponseProfileDto } from "src/modules/user-details/dto/Response-dto";
 import { toResponsePostDto } from "src/utils/post-mapper";
 import { ResponsePostDto } from "../dto/response-dto";
 
@@ -13,10 +12,11 @@ export class PostService {
 
     constructor(@InjectModel(Posts.name) private postModel: Model<PostDocument>) { }
 
-    async createPost(dto: CreatePostDto, file?: Express.Multer.File): Promise<ResponsePostDto> {
-        const { title, description, likesCount, createdBy } = dto;
+    async createPost(dto: CreatePostDto, req: Request, file?: Express.Multer.File,): Promise<ResponsePostDto> {
+        const { title, description, likesCount } = dto;
+        const userId = (req as any).user?.id;
         const post = new this.postModel({
-            title, description, image: file?.filename, likesCount, createdBy
+            title, description, image: file?.filename, likesCount, createdBy: userId
         });
         await post.save();
         return toResponsePostDto(post);

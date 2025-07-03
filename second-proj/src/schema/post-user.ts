@@ -19,8 +19,8 @@ export class Posts {
     likesCount: number;
 
     @Prop({
-        type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true
+        type: mongoose.Schema.Types.ObjectId, ref: 'User'
     })
-    createdBy: string;
+    createdBy?: string;
 }
 export const PostsSchema = SchemaFactory.createForClass(Posts);

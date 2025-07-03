@@ -1,5 +1,5 @@
-import { Body, Controller, Delete, Get, Param, Post, UploadedFile, UseInterceptors } from "@nestjs/common";
-import { ApiBody, ApiConsumes, ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
+import { Body, Controller, Delete, Get, Param, Post, Req, UploadedFile, UseGuards, UseInterceptors } from "@nestjs/common";
+import { ApiBearerAuth, ApiBody, ApiConsumes, ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 
 import { v4 as uuidv4 } from 'uuid';
 
@@ -9,6 +9,7 @@ import { PostService } from "../services/post-services";
 import { FileInterceptor } from "@nestjs/platform-express/multer";
 import { diskStorage } from "multer";
 import * as path from "path";
+import { KartikAuth } from "src/modules/auth/auth";
 
 @ApiTags('posts')
 @Controller('Posts')
@@ -17,6 +18,8 @@ export class PostController {
     constructor(private readonly postService: PostService) { }
 
 
+    @UseGuards(KartikAuth)
+    @ApiBearerAuth()
     @Post("/create")
     @UseInterceptors(FileInterceptor('file', {
         storage: diskStorage({
@@ -47,11 +50,15 @@ export class PostController {
             }
         }
     })
-    createPost(@Body() dto: CreatePostDto, @UploadedFile() file: Express.Multer.File): Promise<ResponsePostDto> {
-        return this.postService.createPost(dto, file);
+    createPost(@Body() dto: CreatePostDto, @UploadedFile() file: Express.Multer.File, @Req() req: Request): Promise<ResponsePostDto> {
+        return this.postService.createPost(dto, req, file);
 
     }
 
+
+
+    @UseGuards(KartikAuth)
+    @ApiBearerAuth()
     @Get("/get")
     @ApiOperation({ summary: 'Get all posts' })
     @ApiResponse({ status: 200, description: 'Returns list of posts' })
@@ -59,12 +66,19 @@ export class PostController {
         return this.postService.getAllPosts();
     }
 
+
+
+    @UseGuards(KartikAuth)
+    @ApiBearerAuth()
     @Get("/:id")
     getDataById(@Param('id') id: string) {
         return this.postService.getDataById(id);
 
     }
 
+
+    @UseGuards(KartikAuth)
+    @ApiBearerAuth()
     @Delete("/:id")
     getDeleteById(@Param('id') id: string): Promise<string> {
         return this.postService.deleteById(id);

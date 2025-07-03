@@ -4,6 +4,9 @@ import { LoginDto } from './dto/loginDto';
 import { RegisterDto } from './dto/registerDto';
 import { KartikAuth } from './auth';
 import { ApiBearerAuth } from '@nestjs/swagger';
+import { RolesGuard } from './role.guard.service';
+import { Roles } from 'src/decorators/roles.decorator';
+import { Role } from 'src/enums/role';
 
 @Controller('auth')
 export class AuthController {
@@ -21,7 +24,8 @@ export class AuthController {
     }
 
     @Get('me')
-    @UseGuards(KartikAuth)
+    @UseGuards(KartikAuth, RolesGuard)
+    @Roles(Role.USER)
     @ApiBearerAuth()
     getProfile(@Req() request: Request) {
         // This will return whatever you put in request['user'] in your guard
