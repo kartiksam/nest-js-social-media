@@ -17,8 +17,6 @@ import { KartikAuth } from "src/modules/auth/auth";
 export class UserDetailsController {
 
     constructor(private readonly userService: UserDetailsService) { }
-    // gym shoes shi chl r ah kiskiki dikkat bad me aajaye khi ghat vad gym cig chupchap er traine h ikalte ni h mehntibache
-    // hide bock moodoff aise test kraye image upload
 
     @UseGuards(KartikAuth)
     @ApiBearerAuth()
@@ -117,9 +115,8 @@ export class UserDetailsController {
         return await this.userService.deleteByID(id);
     }
 
-    // authorziation
+
 }
 
 
 
-// beare token growth usko bhi le ana
