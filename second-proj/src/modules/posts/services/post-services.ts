@@ -33,6 +33,16 @@ export class PostService {
         return (await posts).map(post => toResponsePostDto(post));
     }
 
+
+    async updateUser(id: string) {
+        const post = await this.postModel.findById(id);
+        
+
+    }
+
+
+
+
     async getDataById(id: string): Promise<ResponsePostDto> {
         const post = this.postModel.findById(id).exec();
         if (!post) {

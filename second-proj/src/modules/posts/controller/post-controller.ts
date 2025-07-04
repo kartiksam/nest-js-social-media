@@ -1,4 +1,8 @@
-import { Body, Controller, Delete, Get, Param, Post, Req, UploadedFile, UseGuards, UseInterceptors } from "@nestjs/common";
+/**
+ Controller
+ */
+
+import { Body, Controller, Delete, Get, Param, Post, Put, Req, UploadedFile, UseGuards, UseInterceptors } from "@nestjs/common";
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 
 import { v4 as uuidv4 } from 'uuid';
@@ -10,6 +14,7 @@ import { FileInterceptor } from "@nestjs/platform-express/multer";
 import { diskStorage } from "multer";
 import * as path from "path";
 import { KartikAuth } from "src/modules/auth/auth";
+import { UpdateDto } from "../dto/update-dto";
 
 @ApiTags('posts')
 @Controller('Posts')
@@ -65,6 +70,17 @@ export class PostController {
     getAllPosts() {
         return this.postService.getAllPosts();
     }
+
+    @UseGuards(KartikAuth)
+    @ApiBearerAuth()
+    @Put("/user/update/:id")
+    updateUserHandler(@Body() dto: UpdateDto, @Param('id') id: string) {
+
+        return this.postService.updateUser(id);
+
+    }
+
+
 
 
 
