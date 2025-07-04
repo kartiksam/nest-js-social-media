@@ -5,17 +5,22 @@ import { Comments, CommentsDocument } from "src/schema/comments-user";
 import { createCommentsDto } from "../dtos/create-comment";
 import { ResponseCommentDto } from "../dtos/Response-dto";
 import { toResponseCommentDto } from "src/utils/comments-mapper";
+import { ActivityService } from "src/modules/activity/activity.service";
 
 @Injectable()
 export class CommentsService {
 
-    constructor(@InjectModel(Comments.name) private commentModel: Model<CommentsDocument>) { }
+    constructor(@InjectModel(Comments.name) private commentModel: Model<CommentsDocument>, private activityService: ActivityService) { }
 
-    async createComment(dto: createCommentsDto): Promise<ResponseCommentDto> {
-        const { message, createdBy } = dto;
+    async createComment(dto: createCommentsDto, req: Request): Promise<ResponseCommentDto> {
+        const { message } = dto;
+        const userId = (req as any).user?.id;
         const comment = new this.commentModel({
-            message, createdBy
+            message, createdBy: userId
         });
+        await this.activityService.logActivity({
+            userId: userId, action: "Create", resource: "Comment", description: "Creted a new comment"
+        })
         await comment.save();
         return toResponseCommentDto(comment);
     }

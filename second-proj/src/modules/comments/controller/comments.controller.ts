@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, UseGuards } from "@nestjs/common";
+import { Body, Controller, Get, Param, Post, Req, UseGuards } from "@nestjs/common";
 import { CommentsService } from "../services/comments.services";
 import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 import { createCommentsDto } from "../dtos/create-comment";
@@ -24,8 +24,8 @@ export class CommentsController {
     @UseGuards(KartikAuth)
     @ApiBearerAuth()
     @Post("/create")
-    createComment(@Body() dto: createCommentsDto): Promise<ResponseCommentDto> {
-        return this.commentService.createComment(dto);
+    createComment(@Body() dto: createCommentsDto, @Req() req: Request): Promise<ResponseCommentDto> {
+        return this.commentService.createComment(dto, req);
     }
 
 

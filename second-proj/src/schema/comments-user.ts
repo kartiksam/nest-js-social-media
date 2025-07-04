@@ -10,7 +10,7 @@ export class Comments {
     message: string;
 
     @Prop({ type: mongoose.Schema.Types.ObjectId })
-    createdBy: string;
+    createdBy?: string;
 
 
 }

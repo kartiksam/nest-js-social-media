@@ -5,19 +5,23 @@ import { Model } from "mongoose";
 import { CreatePostDto } from "../dto/create-post";
 import { toResponsePostDto } from "src/utils/post-mapper";
 import { ResponsePostDto } from "../dto/response-dto";
+import { ActivityService } from "src/modules/activity/activity.service";
+
 
 @Injectable()
 export class PostService {
 
 
-    constructor(@InjectModel(Posts.name) private postModel: Model<PostDocument>) { }
+    constructor(@InjectModel(Posts.name) private postModel: Model<PostDocument>, private readonly activityService: ActivityService) { }
 
     async createPost(dto: CreatePostDto, req: Request, file?: Express.Multer.File,): Promise<ResponsePostDto> {
         const { title, description, likesCount } = dto;
         const userId = (req as any).user?.id;
+
         const post = new this.postModel({
             title, description, image: file?.filename, likesCount, createdBy: userId
         });
+        await this.activityService.logActivity({ userId: userId, action: "Create", resource: "Post", description: "Creted a new post", payload: post })
         await post.save();
         return toResponsePostDto(post);
     }
@@ -25,6 +29,7 @@ export class PostService {
 
     async getAllPosts(): Promise<ResponsePostDto[]> {
         const posts = this.postModel.find().exec();
+
         return (await posts).map(post => toResponsePostDto(post));
     }
 
