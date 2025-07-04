@@ -1,5 +1,5 @@
 /**
- Controller
+ Controller for posts
  */
 
 import { Body, Controller, Delete, Get, Param, Post, Put, Req, UploadedFile, UseGuards, UseInterceptors } from "@nestjs/common";
@@ -74,10 +74,11 @@ export class PostController {
     @UseGuards(KartikAuth)
     @ApiBearerAuth()
     @Put("/user/update/:id")
-    updateUserHandler(@Body() dto: UpdateDto, @Param('id') id: string) {
-
-        return this.postService.updateUser(id);
-
+    async updateUserHandler(
+        @Body() dto: UpdateDto,
+        @Param('id') id: string
+    ) {
+        return this.postService.updateUser(id, dto);
     }
 
 

@@ -1,5 +1,8 @@
-import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
+/**
+ * Schema for Activities
+ */
 
+import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 export type ActitvityDocument = Activity & Document;
 @Schema({ timestamps: true })
 export class Activity {

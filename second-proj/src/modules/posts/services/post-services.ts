@@ -6,6 +6,7 @@ import { CreatePostDto } from "../dto/create-post";
 import { toResponsePostDto } from "src/utils/post-mapper";
 import { ResponsePostDto } from "../dto/response-dto";
 import { ActivityService } from "src/modules/activity/activity.service";
+import { UpdateDto } from "../dto/update-dto";
 
 
 @Injectable()
@@ -33,11 +34,23 @@ export class PostService {
         return (await posts).map(post => toResponsePostDto(post));
     }
 
+    async updateUser(id: string, dto: UpdateDto) {
+        const existingUser = await this.postModel.findById(id);
 
-    async updateUser(id: string) {
-        const post = await this.postModel.findById(id);
-        
+        if (!existingUser) {
+            throw new NotFoundException(`User with ID ${id} not found`);
+        }
 
+        // Apply updates
+        Object.assign(existingUser, dto);
+
+        // Save the changes
+        const updatedUser = await existingUser.save();
+
+        return {
+            message: 'User updated successfully',
+            data: updatedUser,
+        };
     }
 
 
