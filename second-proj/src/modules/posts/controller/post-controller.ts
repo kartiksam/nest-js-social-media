@@ -1,12 +1,9 @@
 /**
  Controller for posts
  */
-
 import { Body, Controller, Delete, Get, Param, Post, Put, Req, UploadedFile, UseGuards, UseInterceptors } from "@nestjs/common";
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
-
 import { v4 as uuidv4 } from 'uuid';
-
 import { ResponsePostDto } from "../dto/response-dto";
 import { CreatePostDto } from "../dto/create-post";
 import { PostService } from "../services/post-services";
@@ -16,7 +13,7 @@ import * as path from "path";
 import { KartikAuth } from "src/modules/auth/auth";
 import { UpdateDto } from "../dto/update-dto";
 
-@ApiTags('posts')
+@ApiTags('Posts')
 @Controller('Posts')
 export class PostController {
 

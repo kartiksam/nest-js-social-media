@@ -4,7 +4,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { ActitvityDocument, Activity } from 'src/schema/activity-Schema';
+import { ActitvityDocument, Activity } from './activity-Schema';
 
 @Injectable()
 
@@ -27,6 +27,11 @@ export class ActivityService {
             description,
             payload,
         });
+    }
+
+
+    async getAllActivities() {
+        return this.activityModel.find().sort({ createdAt: -1 }).exec(); // optional: latest first
     }
 
 }

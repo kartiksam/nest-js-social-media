@@ -9,7 +9,7 @@ import { RolesGuard } from "src/modules/auth/role.guard.service";
 import { Roles } from "src/decorators/roles.decorator";
 import { Role } from "src/enums/role";
 
-@ApiTags('users')
+@ApiTags('Users')
 
 @Controller('users')
 export class UserController {

@@ -39,3 +39,40 @@ Each activity is saved as a MongoDB document with:
   updatedAt: Date;
 }
 ```
+
+```ts
+//how to integrate
+import { Module } from '@nestjs/common';
+import { ActivityModule } from './modules/activity/activity.module';
+
+@Module({
+  imports: [ActivityModule],
+})
+export class AppModule {}
+
+
+and import Activity module into that service where you want to use inthat module also
+@Module({
+  imports: [ActivityModule],
+})
+```
+
+```ts
+// Inject ActivityService where you want to log activity
+import { ActivityService } from '../activity/activity.service'; // adjust path as
+
+constructor(private readonly activityService: ActivityService) {}
+
+// Log activity
+    await this.activityService.logActivity({
+      userId: userId,
+      action: 'Create',
+      resource: 'Post',
+      description: 'Created a new post',
+      payload: post,
+    });
+
+
+
+
+```

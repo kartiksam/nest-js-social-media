@@ -8,17 +8,18 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   const config = new DocumentBuilder()
-    .setTitle('Posts-RealTime')
+    .setTitle('Social Media Nest Apis')
     .setDescription('The post Api Description')
     .setVersion('1.0')
     .addBearerAuth()
-    .build();
+    .build();  
 
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
 
 
   const errorLogsService = app.get(ErrorLogService);
+  // applied on entire appliacation
   app.useGlobalFilters(new ErrorLogFilter(errorLogsService));
   app.useGlobalPipes(new ValidationPipe());
   await app.listen(process.env.PORT ?? 3000);
