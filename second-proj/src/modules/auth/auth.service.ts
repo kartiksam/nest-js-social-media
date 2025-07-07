@@ -4,29 +4,63 @@ import { UserService } from '../users/services/user.service';
 import { LoginDto } from './dto/loginDto';
 import { RegisterDto } from './dto/registerDto';
 import * as bcrypt from 'bcrypt';
+import { LoginLogService } from '../login-logmodule/login-logmodule.service';
+import { Request } from 'express';
 
 
 
 @Injectable()
 export class AuthService {
-    constructor(private userService: UserService) { }
+    constructor(private userService: UserService, private readonly loginLogService: LoginLogService,) { }
 
     private SECRET_KEY = "jhkjhfdkjhjhgjgfjgjgfjgdjhbfdghfhgjkhdfghdkjfghsdghdjkfghjkdfhjkghkjgf";
 
-    async validateUser(dto: LoginDto): Promise<any> {
+    async validateUser(dto: LoginDto, req: Request): Promise<any> {
         const { email, password } = dto;
+
+        // Lookup user by email
         const user = await this.userService.findByEmail(email);
+
+        const ipAddress = req.ip || req.connection.remoteAddress;
+        const userAgent = req.headers['user-agent'] || 'unknown';
+
+        // Case 1: User not found
         if (!user) {
+            await this.loginLogService.logLogin({
+                userId: 'unknown',
+                ipAddress,
+                userAgent,
+                loginStatus: 'failed',
+            });
+
             throw new UnauthorizedException('User not found');
         }
+
+        // Case 2: Password invalid
         const isPasswordValid = await bcrypt.compare(password, user.password);
         if (!isPasswordValid) {
+            await this.loginLogService.logLogin({
+                userId: user._id.toString(),
+                ipAddress,
+                userAgent,
+                loginStatus: 'failed',
+            });
+
             throw new UnauthorizedException('Invalid credentials');
         }
-        const { password: _, ...userWithoutPassword } = user;
+
+        // Case 3: Login successful
+        await this.loginLogService.logLogin({
+            userId: user._id.toString(),
+            ipAddress,
+            userAgent,
+            loginStatus: 'success',
+        });
+
+        // Remove password before returning
+        const { password: _, ...userWithoutPassword } = user.toObject?.() || user;
         return userWithoutPassword;
     }
-
 
 
     generateToken(user: any): string {

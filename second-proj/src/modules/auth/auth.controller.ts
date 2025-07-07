@@ -7,14 +7,15 @@ import { ApiBearerAuth } from '@nestjs/swagger';
 import { RolesGuard } from './role.guard.service';
 import { Roles } from 'src/decorators/roles.decorator';
 import { Role } from 'src/enums/role';
+import { Request } from 'express';
 
 @Controller('auth')
 export class AuthController {
 
     constructor(private authService: AuthService) { }
     @Post('login')
-    async login(@Body() loginDto: LoginDto) {
-        const user = await this.authService.validateUser(loginDto);
+    async login(@Body() loginDto: LoginDto, @Req() req: Request) {
+        const user = await this.authService.validateUser(loginDto, req);
         return this.authService.generateToken(user);
     }
 

@@ -6,12 +6,13 @@ import { AuthController } from './auth.controller';
 import { JwtModule, JwtService } from '@nestjs/jwt';
 import { UserModule } from '../users/user-modules';
 import { KartikAuth } from './auth';
+import { LoginModule } from '../login-logmodule/login-logmodule.module';
 
 
 @Module({
   imports: [
 
-    forwardRef(() => UserModule)
+    forwardRef(() => UserModule), LoginModule
 
   ],
   providers: [AuthService, KartikAuth],

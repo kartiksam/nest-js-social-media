@@ -10,10 +10,11 @@ import { AuthModule } from './modules/auth/auth.module';
 import { PermissionModule } from './modules/permission/permission.module';
 import { ActivityModule } from './modules/activity/activity.module';
 import { ErrorLogModule } from './modules/error-log/error-log.module';
+import { LoginModule } from './modules/login-logmodule/login-logmodule.module';
 
 
 @Module({
-  imports: [UserModule, DatabaseModule, UserDetailsModule, PostsModule, CommentsModule, AuthModule, PermissionModule, ActivityModule, ErrorLogModule],
+  imports: [UserModule, DatabaseModule, UserDetailsModule, PostsModule, CommentsModule, AuthModule, PermissionModule, ActivityModule, ErrorLogModule, LoginModule],
   controllers: [AppController],
   providers: [AppService],
 })
