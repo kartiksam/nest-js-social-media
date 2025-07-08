@@ -6,6 +6,7 @@ import { RegisterDto } from './dto/registerDto';
 import * as bcrypt from 'bcrypt';
 import { LoginLogService } from '../login-logmodule/login-logmodule.service';
 import { Request } from 'express';
+import { StatusEnum } from '../login-logmodule/enums/StatusEnum';
 
 
 
@@ -18,49 +19,54 @@ export class AuthService {
     async validateUser(dto: LoginDto, req: Request): Promise<any> {
         const { email, password } = dto;
 
-        // Lookup user by email
+
+        const ip =
+            (req.headers['x-forwarded-for'] as string)?.split(',')[0]?.trim() ||
+            req.socket?.remoteAddress ||
+            'null';
+        const user_agent = req.headers['user-agent'] || 'null';
+
+
         const user = await this.userService.findByEmail(email);
 
-        const ipAddress = req.ip || req.connection.remoteAddress;
-        const userAgent = req.headers['user-agent'] || 'unknown';
 
-        // Case 1: User not found
         if (!user) {
             await this.loginLogService.logLogin({
-                userId: 'unknown',
-                ipAddress,
-                userAgent,
-                loginStatus: 'failed',
+                user_id: 'null',
+                ip,
+                user_agent,
+                status: StatusEnum.FAILED,
             });
 
             throw new UnauthorizedException('User not found');
         }
 
-        // Case 2: Password invalid
+
         const isPasswordValid = await bcrypt.compare(password, user.password);
         if (!isPasswordValid) {
             await this.loginLogService.logLogin({
-                userId: user._id.toString(),
-                ipAddress,
-                userAgent,
-                loginStatus: 'failed',
+                user_id: user._id.toString(),
+                ip,
+                user_agent,
+                status: StatusEnum.FAILED,
             });
 
             throw new UnauthorizedException('Invalid credentials');
         }
 
-        // Case 3: Login successful
+
         await this.loginLogService.logLogin({
-            userId: user._id.toString(),
-            ipAddress,
-            userAgent,
-            loginStatus: 'success',
+            user_id: user._id.toString(),
+            ip,
+            user_agent,
+            status: StatusEnum.SUCCESS,
         });
 
-        // Remove password before returning
+
         const { password: _, ...userWithoutPassword } = user.toObject?.() || user;
         return userWithoutPassword;
     }
+
 
 
     generateToken(user: any): string {

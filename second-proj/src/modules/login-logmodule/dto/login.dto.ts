@@ -1,17 +1,18 @@
 import { ApiProperty } from "@nestjs/swagger";
+import { StatusEnum } from "../enums/StatusEnum";
 
 export class logDto {
 
     @ApiProperty()
-    userId: string;
+    user_id: string;
 
     @ApiProperty({ required: false })
-    ipAddress?: string;
+    ip?: string;
 
     @ApiProperty({ required: false })
-    userAgent?: string;
+    user_agent?: string;
 
-    @ApiProperty({ enum: ['success', 'failed'] })
-    loginStatus?: 'success' | 'failed';
+    @ApiProperty({ enum: StatusEnum })
+    status?: StatusEnum;
 
 }

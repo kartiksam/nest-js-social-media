@@ -8,13 +8,13 @@ export type LoginLogDocument = LoginLog & Document;
 export class LoginLog {
 
     @Prop({ required: true })
-    userId: string;
+    user_id: string;
 
     @Prop()
-    ipAddress?: string;
+    ip?: string;
 
     @Prop()
-    userAgent?: string;
+    user_agent?: string;
 
     @Prop({ enum: StatusEnum })
     status?: StatusEnum;

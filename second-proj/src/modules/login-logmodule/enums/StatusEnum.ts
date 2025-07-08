@@ -1,4 +1,4 @@
 export enum StatusEnum {
-    SUCCESS,
-    FAILURE
+    SUCCESS = 'SUCCESS',
+    FAILED = 'FAILED'
 }
