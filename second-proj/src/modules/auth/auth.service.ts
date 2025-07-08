@@ -17,7 +17,7 @@ export class AuthService {
 
     async validateUser(dto: LoginDto, req: Request): Promise<any> {
         const { email, password } = dto;
-
+        console.log(email, password);
 
         const ip =
             (req.headers['x-forwarded-for'] as string)?.split(',')[0]?.trim() ||

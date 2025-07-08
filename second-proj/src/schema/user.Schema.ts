@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import * as  moment from "moment";
+import * as moment from "moment";
 import { Role } from "src/enums/role";
 
 
