@@ -9,7 +9,6 @@ import { Request } from 'express';
 import { StatusEnum } from '../login-logmodule/enums/StatusEnum';
 
 
-
 @Injectable()
 export class AuthService {
     constructor(private userService: UserService, private readonly loginLogService: LoginLogService,) { }

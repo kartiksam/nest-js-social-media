@@ -14,8 +14,4 @@ export class Address {
 
     @Prop()
     pinCode: number;
-
-
-
-
 }

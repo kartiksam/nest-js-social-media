@@ -1,9 +1,10 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
+import * as moment from "moment";
 import * as mongoose from "mongoose";
 
 export type CommentsDocument = Comments & Document;
 
-@Schema({ timestamps: true })
+@Schema()
 export class Comments {
 
     @Prop()
@@ -11,6 +12,17 @@ export class Comments {
 
     @Prop({ type: mongoose.Schema.Types.ObjectId })
     createdBy?: string;
+
+    @Prop({ type: Number, default: moment().utc().valueOf() })
+    created_at: number;
+
+    @Prop({ type: Number, default: null })
+    updated_at: number;
+
+
+
+
+
 
 
 }

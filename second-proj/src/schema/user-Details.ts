@@ -1,10 +1,11 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Address } from "./address-Schema";
 import * as mongoose from "mongoose";
+import * as  moment from "moment";
 
 export type UserDetailsDocument = UserDetails & Document;
 
-@Schema({ timestamps: true })
+@Schema()
 export class UserDetails {
 
     @Prop()
@@ -19,6 +20,17 @@ export class UserDetails {
 
     @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
     createdBy?: string;
+
+    @Prop({ type: Number, default: moment().utc().valueOf() })
+    created_at: number;
+
+    @Prop({ type: Number, default: null })
+    updated_at: number;
+
+
+
+
+
 
 
 }

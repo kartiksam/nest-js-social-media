@@ -1,9 +1,10 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
+import * as  moment from "moment";
 import { Role } from "src/enums/role";
 
 
 export type UserDocument = User & Document;
-@Schema({ timestamps: true })
+@Schema()
 export class User {
 
     @Prop()
@@ -23,6 +24,13 @@ export class User {
 
     @Prop()
     deletedAt?: Date;
+
+    @Prop({ type: Number, default: moment().utc().valueOf() })
+    created_at: number;
+
+    @Prop({ type: Number, default: null })
+    updated_at: number;
+
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
